@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset=utf-8 />
+	<title>Map Template Browser Title</title>
+	<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css" />
+	
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+	
+    
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Lora" rel="stylesheet">
+
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			background: "whitesmoke";
+			font-family: "Fantacy", sans-serif;
+			color: #0e3728;
+		}
+
+		h1 {
+			position: absolute;
+			margin-top: 0;
+			top: 10px;
+			left: 45px;
+			font-size: 2em;
+			font-family: "Bold", system-ui;
+			letter-spacing: .04em;
+			padding: 10px 15px;
+			background: rgba(256, 256, 256);
+			border: 2px solid rgb(62, 52, 66);
+			border-radius: 3px;
+			z-index: 800;
+		}
+
+		h2 {
+			font-family: "Lora",system-ui;
+			letter-spacing: .04em;
+            color: rgb(179, 151, 185)
+		}
+        h3 {
+            font-family: "Lora", system-uiif;
+        letter-spacing: .04em;
+        color: rgb(179, 151, 185)
+
+        }
+
+		#map {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			width: 100%;
+		}
+
+		section {
+			position: absolute;
+			bottom: 0;
+			left: 10px;
+			width: 280px;
+			margin: 20px auto;
+			padding: 0 10px;
+			background: rgba(256, 256, 256);
+			border: 1px solid grey;
+			border-radius: 3px;
+			z-index: 800;
+		}
+
+		p {
+			font-size: .8em;
+			line-height: 1.5em;
+		}
+
+		a {
+			color: #0f4b34;
+			text-decoration: none;
+		}
+
+		a:hover {
+			text-decoration: underline;
+		}
+	</style>
+</head>
+
+<body>
+
+	<h1>My walk to class</h1>
+
+	<div id='map'></div>
+
+	<section>
+		<h2>About my walk</h2>
+
+		<p>I decided to make this map which represents my walk from Leon Levine Hall to campus. The walk is approximately 2 miles and even though it follows a busy street, it is quite therapeutic. I added Kovu coffee as a stop because occasionally I'll treat myself to a dirty chai. My other additional stop is Daniel Boone Inn. I work here so it is frequently on my route to the 
+			library	if I park at the restaurant.</p>
+    <h3>Thoughts along my walk</h3>
+		<p>Typically on these walks I am thinking about sustainability, transportation, and geography. The Boone creek follows along my path and I am always wondering how different the path would look if the creek was restored. Most of the creek is covered by parking lots. As we saw with the hurricane, our infrastructure is prone to flooding. One of the reasons flooding was so prevalent was because the water had nowhere to go. If the creek was properly restored it could have potentially mitigated the damage. Further, extending paths like the Green Way in urban zones promotes a healthier life, less CO2 emissions, and increased accessibility.</p>
+		<p>Map authored by Dezirae Britton</p>
+		
+		<p>Text provided by <a href="https://library.appstate.edu/about/locations/belk">Belk Library Commons</a></p>
+
+	</section>
+
+	<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <script src="data/route.js"></script>
+
+	<script>
+
+//options to be used when creating the map
+		var options = {
+			center: [36.206144787395274, -81.66850285078353],
+			zoom: 16
+		}
+
+ console.log(data);
+
+//creation of the Leaflet map
+		var map = L.map('map', options);
+
+//request to load basemap
+//var Stadia_OSMBright = L.tileLayer('https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.{ext}', {
+//	minZoom: 0,
+//	maxZoom: 20,
+	///attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	//ext: 'png'
+//}).addTo(map);
+
+
+var Esri_WorldTopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+}).addTo(map);
+
+//string content to be inserted into a tooltip
+	
+
+//create a Leaflet marker, centered on the map's center.
+	//	L.marker(map.getCenter())
+		//	.bindTooltip(message) //bind the tooltip and message to the marker
+		//	.addTo(map) // add the marker to the map`
+	//	.openTooltip(); // open the tooltip
+
+    //var myRoute = L.geoJson(data).addTo(map);
+//map.fitBounds(myRoute.getBounds());
+
+var myRoute = L.geoJson(data, {
+ filter : function(feature) {
+ if(feature.geometry.type =="LineString") {
+ return feature;
+ } 
+},
+ style : function(feature) {
+ return {
+ color: "#005DAA",
+ weight: 6,
+ opacity: 0.7,
+ dashArray: "5, 5"
+ } }
+ }).addTo(map);
+ var myStops = L.geoJson(data, {
+ filter : function(feature) {
+ if(feature.geometry.type == "Point") {
+ return feature;
+ }
+ },
+ onEachFeature : function(feature, layer) {
+    layer.bindTooltip(feature.properties['name']);
+ }
+ }).addTo(map);
+
+	</script>
+
+
+</body>
+
+</html>
